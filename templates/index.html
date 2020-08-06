@@ -1,0 +1,13 @@
+<h1>Hello {{ welcome_name }}</h1>
+<ul>
+    {% for post in title %}
+    <li>
+        <a href="/recipe/{{ post.id }}/">{{ post.title }}</a> - by {{ post.author.name}} | {{post.timerequired}}
+        <ul>
+            <li>
+                {{post.description}}
+            </li>
+        </ul>
+    </li>
+    {% endfor %}
+</ul>

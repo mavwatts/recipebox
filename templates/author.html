@@ -1,0 +1,6 @@
+{% if not author %}
+<h1>The author youre looking for doesnt exist!</h1>
+{% else %}
+    <h2>{{ author.name }}</h2>
+    <h4>{{ author.bio }}</h4>
+{% endif %}
