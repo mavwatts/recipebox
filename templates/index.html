@@ -2,12 +2,7 @@
 <ul>
     {% for post in title %}
     <li>
-        <a href="/recipe/{{ post.id }}/">{{ post.title }}</a> - by {{ post.author.name}} | {{post.timerequired}}
-        <ul>
-            <li>
-                {{post.description}}
-            </li>
-        </ul>
+        <a href="recipe/{{ post.id }}/">{{ post.title }}</a>
     </li>
     {% endfor %}
 </ul>
