@@ -1,5 +1,4 @@
 """recipebox URL Configuration
-
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/3.1/topics/http/urls/
 Examples:
@@ -25,6 +24,5 @@ urlpatterns = [
     path('author/<int:author_id>/', views.author_view),
     path('login/', views.login_view, name='loginview'),
     path('logout/', views.logout_view, name='logoutview'),
-    path('signup/', views.signup_view, name='signupview'),
     path('admin/', admin.site.urls),
 ]
