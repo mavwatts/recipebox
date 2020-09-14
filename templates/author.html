@@ -2,12 +2,21 @@
 {% if not author %}
 <h1>The author youre looking for doesnt exist!</h1>
 {% else %}
-    <h2>{{ author.name }}</h2>
-    <h4>{{ author.bio }}</h4>
+    <h2>Name: {{ author.name }}</h2>
+    <h4>Bio: {{ author.bio }}</h4>
+    
     <ul>
-        {%for recipe in author_recipe%}
+        {%for recipe in recipes%}
             <li>
-                <a href = '/recipe/{{ post.id }}'>{{ post.title }}</a>
+                <a href = '/recipe/{{ recipe.id }}'>{{ recipe.title }}</a>
+            </li>
+        {%endfor%} 
+    </ul>
+    <h1>My Favorites</h1>
+    <ul>
+        {%for recipe in favorites%}
+            <li>
+                <a href = '/recipe/{{ recipe.food.id }}'>{{ recipe.food.title }}</a>
             </li>
         {%endfor%} 
     </ul>

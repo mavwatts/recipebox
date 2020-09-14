@@ -1,6 +1,6 @@
 from django.shortcuts import render, HttpResponseRedirect, reverse
 from recipes.models import Recipe
-from recipes.models import Author
+from recipes.models import Author, Favorites
 from recipes.forms import AddRecipeForm, AddAuthorForm, LoginForm
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
@@ -16,9 +16,36 @@ def recipe_detail(request, recipe_id):
     my_title = Recipe.objects.filter(id=recipe_id).first()
     return render(request, "recipe_detail.html", {"recipe": my_title})
 
+def favoriteme(request, recipe_id):
+    person_inst = Author.objects.filter(id=request.user.id).first()
+    food_inst = Recipe.objects.filter(id=recipe_id).first()
+    Favorites.objects.create(
+        person = person_inst,
+        food = food_inst
+    )
+    return HttpResponseRedirect(reverse('homepage'))
+
+def editme(request, recipe_id):
+    form = AddRecipeForm()
+    if form.is_valid():
+        data = form.cleaned_data
+        content = Recipe.objects.filter(id=recipe_id).first()
+        Recipe.objects.create(
+            title=content.title,
+            time_required=content.time_required,
+            description=content.description,
+            instructions=content.instructions,
+            author=request.user.author,
+        )
+        return HttpResponseRedirect(reverse("homepage"))
+    return render(request, 'generic_form.html', {'form': form})
+
 def author_view(request, author_id):
     my_title = Author.objects.filter(id=author_id).first()
-    return render(request, "author.html", {"author": my_title})
+    recipes = Recipe.objects.filter(author=author_id)
+    personAuthor = Author.objects.filter(id=author_id).first()
+    favorites = Favorites.objects.filter(person=author_id)
+    return render(request, "author.html", {"author": my_title, 'favorites': favorites, 'recipes': recipes})
 
 @login_required
 @staff_member_required

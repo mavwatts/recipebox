@@ -1,7 +1,10 @@
 {% if not recipe %}
 <h1>The post youre looking for doesnt exist!</h1>
 {% else %}
-    <h2>{{ recipe.title }}</h2>
-    <h4>{{ recipe.author.name }}</h4>
-    <p>{{ recipe.description }}</p>
+    <h2>Title: {{ recipe.title }}</h2>
+    <h4>Author: {{ recipe.author.name }}</h4>
+    <p>Description: {{ recipe.description }}</p>
+    {% if request.user.is_authenticated %}
+    <a href="favorite/{{recipe.id}}">Favorite Me</a>
+    {% endif %}
 {% endif %}
