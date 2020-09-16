@@ -20,6 +20,7 @@ urlpatterns = [
     path('', views.index, name='homepage'),
     path('author/<int:author_id>/', views.author_view),
     path('recipe/<int:recipe_id>/', views.recipe_detail),
+    path('favorite_view/<int:favorite_id>/', views.favorite_view, name="favorite"),
     path('addrecipe/', views.add_recipe),
     path('addauthor/', views.add_author),
     path('login/', views.login_view, name='loginview'),

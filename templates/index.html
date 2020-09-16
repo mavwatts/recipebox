@@ -17,4 +17,8 @@
 <br>
 
 <br>
+{% if request.user.is_authenticated %}
+<li>
 <a href="logout/">Logout!</a>
+</li>
+{% endif %}

@@ -6,6 +6,7 @@ from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 # from django.contrib.admin.views.decorators import staff_member_required
+from django import forms
 
 
 def index(request):
@@ -46,10 +47,10 @@ def add_recipe(request):
         form = AddRecipeForm(request.POST)
         if form.is_valid():
             data = form.cleaned_data
-        # if request.user.is_staff:
-        #     staff_auth=data.get('author')
-        # else:
-        #     staff_auth=request.user.author
+        if request.user.is_staff:
+            staff_auth=data.get('author')
+        else:
+            staff_auth=request.user.author
             Recipe.objects.create(
                 title=data.get('title'),
                 time_required=data.get('time_required'),
@@ -60,6 +61,13 @@ def add_recipe(request):
             return HttpResponseRedirect(reverse("homepage"))
     form = AddRecipeForm()
     return render(request, "generic_form.html", {'form': form})
+
+def favorite_view(request, favorite_id):
+    current_author = Author.objects.get(user__username=request.user.username)
+    current_author.favorite.add(Recipe.objects.get(id=favorite_id))
+    current_author.save()
+    return HttpResponseRedirect(reverse('homepage'))
+
 
 def login_view(request):
     if request.method == "POST":
