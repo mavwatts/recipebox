@@ -18,10 +18,10 @@ from recipes import views
 
 urlpatterns = [
     path('', views.index, name='homepage'),
-    path('recipe/<int:recipe_id>/', views.recipe_detail),
-    path('addauthor/', views.add_author),
-    path('addrecipe/', views.add_recipe),
     path('author/<int:author_id>/', views.author_view),
+    path('recipe/<int:recipe_id>/', views.recipe_detail),
+    path('addrecipe/', views.add_recipe),
+    path('addauthor/', views.add_author),
     path('login/', views.login_view, name='loginview'),
     path('logout/', views.logout_view, name='logoutview'),
     path('admin/', admin.site.urls),

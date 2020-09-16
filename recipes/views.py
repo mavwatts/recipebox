@@ -5,7 +5,7 @@ from recipes.forms import AddRecipeForm, AddAuthorForm, LoginForm
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from django.contrib.admin.views.decorators import staff_member_required
+# from django.contrib.admin.views.decorators import staff_member_required
 
 
 def index(request):
@@ -21,19 +21,22 @@ def author_view(request, author_id):
     return render(request, "author.html", {"author": my_title})
 
 @login_required
-@staff_member_required
+# @staff_member_required
 def add_author(request):
-    if request.method == 'POST':
-        form = AddAuthorForm(request.POST)
-        if form.is_valid():
-            data = form.cleaned_data
-            new_user = User.objects.create_user(username=data.get('username'), password=data.get('password'))  
-            Author.objects.create(
-                name=data.get('name'),
-                bio=data.get('bio'),
-                user=new_user
-            )
+    if request.user.is_staff:
+        if request.method == 'POST':
+            form = AddAuthorForm(request.POST)
+            if form.is_valid():
+                data = form.cleaned_data
+                new_user = User.objects.create_user(username=data.get('username'), password=data.get('password'))  
+                Author.objects.create(
+                    name=data.get('name'),
+                    bio=data.get('bio'),
+                    user=new_user
+                )
             return HttpResponseRedirect(reverse('homepage'))
+    else:
+        return HttpResponse("This action is forbidden")
     form = AddAuthorForm()
     return render(request, "generic_form.html", {'form': form})
 
@@ -43,6 +46,10 @@ def add_recipe(request):
         form = AddRecipeForm(request.POST)
         if form.is_valid():
             data = form.cleaned_data
+        # if request.user.is_staff:
+        #     staff_auth=data.get('author')
+        # else:
+        #     staff_auth=request.user.author
             Recipe.objects.create(
                 title=data.get('title'),
                 time_required=data.get('time_required'),
