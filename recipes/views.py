@@ -20,7 +20,8 @@ def recipe_detail(request, recipe_id):
 
 def author_view(request, author_id):
     my_title = Author.objects.filter(id=author_id).first()
-    return render(request, "author.html", {"author": my_title})
+    favorites = my_title.favorite.all()
+    return render(request, "author.html", {"author": my_title, "favorites": favorites})
 
 @login_required
 # @staff_member_required

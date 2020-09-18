@@ -11,5 +11,11 @@
             </li>
         {%endfor%} 
     </ul>
+    <p>Favorites: {{ author.favorite.count }} </p>
+    {%for fave in favorites%}
+    <p>
+        <a href="/recipe/{{ fave.id }}/">{{ fave.title }}</a>
+    </p>
+    {% endfor %}
 {% endif %}
 </div>

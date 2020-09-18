@@ -6,10 +6,9 @@
     <p>{{ recipe.description }}</p>
 {% endif %}
 {% if user.is_authenticated %}
+<button>
 <a href="/favorite_view/{{recipe.id}}">
     <p>Favorite</p>
 </a>
-<a href="/unfavorite_view/{{recipe.id}}">
-    <p>Unfavorite</p>
-</a>
+</button>
 {% endif %}
