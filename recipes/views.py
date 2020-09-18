@@ -1,4 +1,4 @@
-from django.shortcuts import render, HttpResponseRedirect, reverse
+from django.shortcuts import render, HttpResponseRedirect, reverse, redirect
 from recipes.models import Recipe
 from recipes.models import Author
 from recipes.forms import AddRecipeForm, AddAuthorForm, LoginForm
@@ -61,6 +61,30 @@ def add_recipe(request):
             return HttpResponseRedirect(reverse("homepage"))
     form = AddRecipeForm()
     return render(request, "generic_form.html", {'form': form})
+
+@login_required
+def edit_recipe(request, recipe_id):
+    form = None
+    edit = Recipe.objects.get(id=recipe_id)
+    data = {"title": edit.title, "description": edit.description, "time_required": edit.time_required, "instructions": edit.instructions, "author": edit.author}
+    if request.user.is_staff or request.user.author.id == recipe.author.id:
+        if request.method == "POST":
+            form = AddRecipeForm(request.POST)
+            if form.is_valid():
+                data = form.cleaned_data
+                edit.title = data["title"]
+                edit.description = data["description"]
+                edit.time_required = data["time_required"]
+                edit.instructions = data["instructions"]
+                edit.author = data["author"]
+                edit.save()
+                return redirect("recipe", edit.pk)
+        else:
+            form = AddRecipeForm(initial=data)
+            return render(request, "generic_form.html", {'form':form})
+    else:
+        return HttpResponseRedirect(reverse('homepage'))
+    #need to figure out how to put edit into urls and recipedetail.html
 
 def favorite_view(request, favorite_id):
     current_author = Author.objects.get(user__username=request.user.username)
