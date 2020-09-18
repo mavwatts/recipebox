@@ -1,4 +1,5 @@
 from django.shortcuts import render, HttpResponseRedirect, reverse, redirect
+from django.http import HttpResponseForbidden
 from recipes.models import Recipe
 from recipes.models import Author
 from recipes.forms import AddRecipeForm, AddAuthorForm, LoginForm
@@ -31,13 +32,13 @@ def add_author(request):
                 data = form.cleaned_data
                 new_user = User.objects.create_user(username=data.get('username'), password=data.get('password'))  
                 Author.objects.create(
-                    name=data.get('name'),
+                    name=data.get('username'),
                     bio=data.get('bio'),
                     user=new_user
                 )
             return HttpResponseRedirect(reverse('homepage'))
     else:
-        return HttpResponse("This action is forbidden")
+        return HttpResponseForbidden("This action is forbidden")
     form = AddAuthorForm()
     return render(request, "generic_form.html", {'form': form})
 
@@ -67,7 +68,7 @@ def edit_recipe(request, recipe_id):
     form = None
     edit = Recipe.objects.get(id=recipe_id)
     data = {"title": edit.title, "description": edit.description, "time_required": edit.time_required, "instructions": edit.instructions, "author": edit.author}
-    if request.user.is_staff or request.user.author.id == recipe.author.id:
+    if request.user.is_staff or request.user.username == edit.author.name:
         if request.method == "POST":
             form = AddRecipeForm(request.POST)
             if form.is_valid():
